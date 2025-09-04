@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hollywood Hacker Simulator</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="console"></div>
+<div id="interface">
+  <div id="browser" class="panel">
+    <h2>Secure Files</h2>
+    <ul>
+      <li class="file">blueprints
+        <ul>
+          <li>icbm-missile-design.pdf</li>
+          <li>space-laser-schematics.dxf</li>
+        </ul>
+      </li>
+      <li class="file">nuclear_launch_codes.txt</li>
+      <li class="file">bunker_and_silo_locations.geojson</li>
+      <li class="file">agent_identities.csv</li>
+      <li class="file">secret_projects
+        <ul>
+          <li>project-bluebook.txt</li>
+          <li>psyops-mind-control.docx</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <div id="map" class="panel">
+    <svg id="world" viewBox="0 0 1000 500">
+      <path d="M80 120 L150 60 L220 80 L250 140 L210 170 L150 150 Z" class="land"/>
+      <path d="M260 120 L320 80 L400 90 L460 120 L480 170 L430 190 L360 160 Z" class="land"/>
+      <path d="M480 120 L560 110 L630 90 L700 120 L680 180 L600 200 L530 170 Z" class="land"/>
+      <path d="M630 200 L670 240 L650 280 L600 290 L570 260 Z" class="land"/>
+      <path d="M350 220 L380 260 L360 300 L300 290 L280 250 Z" class="land"/>
+      <g id="traces"></g>
+    </svg>
+  </div>
+  <div id="firewall" class="panel">
+    <h2>Firewall Status</h2>
+    <div class="layer"><span>Perimeter</span><div class="bar"><div id="bar1"></div></div></div>
+    <div class="layer"><span>Internal</span><div class="bar"><div id="bar2"></div></div></div>
+    <div class="layer"><span>Core</span><div class="bar"><div id="bar3"></div></div></div>
+    <button id="counter">Deploy Countermeasure</button>
+  </div>
+</div>
+<div id="popups"></div>
+<script src="script.js"></script>
+</body>
+</html>
