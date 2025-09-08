@@ -1,54 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Hollywood Hacker Simulator</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hollywood Hacker Command Center</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preload" as="script" href="script.js">
+  <meta name="theme-color" content="#0ff" />
 </head>
 <body>
-<div id="console"></div>
-<div id="interface">
-  <div id="browser" class="panel">
-    <h2>Secure Files</h2>
-    <ul>
-      <li class="file">blueprints
-        <ul>
-          <li>icbm-missile-design.pdf</li>
-          <li>space-laser-schematics.dxf</li>
+  <div class="scanlines" aria-hidden="true"></div>
+  <header class="topbar">
+    <div class="brand">
+      <span class="badge">LIVE</span>
+      <h1>Hollywood Hacker</h1>
+    </div>
+    <div class="stats">
+      <div class="stat"><label>Threat</label><span id="threat">12%</span></div>
+      <div class="stat"><label>Uptime</label><span id="uptime">00:00:00</span></div>
+      <div class="stat"><label>Agents</label><span id="agents">12</span></div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="side left">
+      <section class="panel console">
+        <div class="panel-head">
+          <h2>Telemetry</h2>
+          <div class="panel-actions">
+            <button class="chip" id="pauseLogs">Pause</button>
+            <button class="chip" id="clearLogs">Clear</button>
+          </div>
+        </div>
+        <div id="console" class="console-body"></div>
+      </section>
+
+      <section class="panel vault">
+        <div class="panel-head"><h2>File Vault</h2></div>
+        <ul class="tree" id="vault">
+          <li class="dir">/secure
+            <ul>
+              <li class="dir">blueprints
+                <ul>
+                  <li class="file">icbm-missile-design.pdf</li>
+                  <li class="file">space-laser-schematics.dxf</li>
+                </ul>
+              </li>
+              <li class="file">nuclear_launch_codes.txt</li>
+              <li class="file">bunker_and_silo_locations.geojson</li>
+              <li class="file">agent_identities.csv</li>
+              <li class="dir">secret_projects
+                <ul>
+                  <li class="file">project-bluebook.txt</li>
+                  <li class="file">psyops-mind-control.docx</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
         </ul>
-      </li>
-      <li class="file">nuclear_launch_codes.txt</li>
-      <li class="file">bunker_and_silo_locations.geojson</li>
-      <li class="file">agent_identities.csv</li>
-      <li class="file">secret_projects
-        <ul>
-          <li>project-bluebook.txt</li>
-          <li>psyops-mind-control.docx</li>
-        </ul>
-      </li>
-    </ul>
-  </div>
-  <div id="map" class="panel">
-    <svg id="world" viewBox="0 0 1000 500">
-      <path d="M70 110 L120 60 L200 40 L260 80 L300 120 L280 160 L240 170 L220 200 L200 220 L160 210 L140 180 L100 150 Z" class="land"/>
-      <path d="M250 230 L280 260 L300 300 L290 340 L280 380 L260 430 L240 380 L230 320 L240 280 Z" class="land"/>
-      <path d="M340 80 L400 60 L460 60 L520 80 L560 60 L620 80 L680 100 L740 120 L780 160 L820 200 L840 240 L820 260 L780 240 L740 220 L700 220 L660 200 L620 200 L580 180 L540 180 L500 160 L460 140 L420 140 L380 120 Z" class="land"/>
-      <path d="M480 200 L520 220 L560 260 L560 320 L540 360 L500 420 L460 360 L440 300 L440 240 Z" class="land"/>
-      <path d="M760 320 L780 300 L820 300 L860 320 L880 360 L860 400 L820 400 L780 380 Z" class="land"/>
-      <path d="M200 40 L240 20 L280 40 L260 80 L220 80 Z" class="land"/>
-      <path d="M0 460 L1000 460 L1000 500 L0 500 Z" class="land"/>
-      <g id="traces"></g>
-    </svg>
-  </div>
-  <div id="firewall" class="panel">
-    <h2>Firewall Status</h2>
-    <div class="layer"><span>Perimeter</span><div class="bar"><div id="bar1"></div></div></div>
-    <div class="layer"><span>Internal</span><div class="bar"><div id="bar2"></div></div></div>
-    <div class="layer"><span>Core</span><div class="bar"><div id="bar3"></div></div></div>
-    <button id="counter">Deploy Countermeasure</button>
-  </div>
-</div>
-<div id="popups"></div>
-<script src="script.js"></script>
+      </section>
+    </aside>
+
+    <section class="center">
+      <div class="panel mapwrap">
+        <div class="panel-head">
+          <h2>Global Attack Surface</h2>
+          <div class="legend">
+            <span class="dot in">Inbound</span>
+            <span class="dot out">Outbound</span>
+            <span class="dot neutral">Neutral</span>
+          </div>
+        </div>
+        <div class="map-outer">
+          <div class="radar" aria-hidden="true"></div>
+          <svg id="world" viewBox="0 0 1000 500" role="img" aria-label="World map">
+            <defs>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+                <feMerge>
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+              <linearGradient id="ocean" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#021019"/>
+                <stop offset="100%" stop-color="#031e2d"/>
+              </linearGradient>
+            </defs>
+            <rect x="0" y="0" width="1000" height="500" fill="url(#ocean)"/>
+            <!-- Realistic(ish) landmasses: simplified but recognizable -->
+            <g id="lands" class="lands" filter="url(#glow)">
+              <!-- North America -->
+              <path class="land" d="M90,120 C130,90 200,70 250,85 C290,97 315,120 330,145 C345,170 335,200 305,210 C280,218 260,225 245,245 C225,270 210,305 200,330 C190,350 180,365 160,365 C140,365 120,350 110,330 C95,300 100,270 120,245 C140,220 140,200 120,185 C95,165 80,145 90,120 Z"/>
+              <!-- South America -->
+              <path class="land" d="M260,240 C290,260 315,295 320,330 C325,360 320,395 300,430 C285,455 260,460 245,445 C235,435 235,415 240,395 C246,370 245,345 230,325 C220,310 220,290 230,270 C240,255 250,245 260,240 Z"/>
+              <!-- Greenland -->
+              <path class="land" d="M290,60 C310,50 330,48 350,54 C365,58 372,70 365,82 C355,97 338,105 320,108 C305,110 290,103 288,90 C286,78 282,65 290,60 Z"/>
+              <!-- Europe + North Africa -->
+              <path class="land" d="M420,110 C450,95 485,95 515,105 C540,112 565,120 585,135 C600,148 600,165 585,175 C565,190 545,185 525,180 C505,175 485,175 470,185 C455,195 445,210 440,225 C435,245 430,255 420,260 C400,270 380,265 370,250 C360,235 365,220 380,205 C395,190 395,175 385,160 C372,142 390,125 420,110 Z"/>
+              <!-- Sub-Saharan Africa -->
+              <path class="land" d="M470,210 C500,205 530,215 555,235 C575,250 585,275 585,305 C585,330 575,360 555,380 C540,395 520,405 495,400 C470,395 455,380 455,360 C453,330 440,310 420,295 C410,285 410,270 420,260 C430,250 455,215 470,210 Z"/>
+              <!-- Middle East + West Asia -->
+              <path class="land" d="M585,195 C610,190 640,195 665,210 C690,225 700,245 690,265 C680,285 655,295 630,290 C605,285 590,270 585,250 C580,235 575,205 585,195 Z"/>
+              <!-- South Asia -->
+              <path class="land" d="M640,255 C660,250 685,255 705,270 C725,285 730,305 720,320 C710,335 685,340 665,330 C645,320 635,300 640,255 Z"/>
+              <!-- East Asia -->
+              <path class="land" d="M700,210 C730,210 760,225 780,245 C795,260 800,280 790,295 C780,310 760,315 740,310 C720,305 705,295 700,280 C695,265 690,220 700,210 Z"/>
+              <!-- Southeast Asia + Archipelago -->
+              <path class="land" d="M740,305 C760,305 780,315 790,330 C798,343 792,355 775,360 C760,363 745,358 735,350 C725,342 725,330 732,320 C735,315 738,310 740,305 Z"/>
+              <!-- Australia -->
+              <path class="land" d="M800,345 C825,340 855,350 875,370 C890,385 890,405 875,415 C855,430 825,430 800,420 C780,410 770,390 780,370 C787,360 792,350 800,345 Z"/>
+              <!-- Antarctica (stylized) -->
+              <path class="land" d="M50,460 C150,445 350,445 550,455 C700,462 850,462 950,455 L950,490 L50,490 Z"/>
+            </g>
+            <g id="arcs"></g>
+            <g id="pulses"></g>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <aside class="side right">
+      <section class="panel status">
+        <div class="panel-head"><h2>Defense Grid</h2></div>
+        <div class="layers">
+          <div class="layer"><span>Perimeter</span><div class="bar"><div id="bar1"></div></div></div>
+          <div class="layer"><span>Internal</span><div class="bar"><div id="bar2"></div></div></div>
+          <div class="layer"><span>Core</span><div class="bar"><div id="bar3"></div></div></div>
+        </div>
+        <div class="controls">
+          <button id="counter" class="btn primary">Deploy Countermeasure</button>
+          <button id="traceback" class="btn">Trace Back</button>
+        </div>
+      </section>
+
+      <section class="panel intel">
+        <div class="panel-head"><h2>Live Incidents</h2></div>
+        <ul id="incidents" class="incidents"></ul>
+      </section>
+    </aside>
+  </main>
+
+  <div id="popups"></div>
+  <script src="script.js"></script>
 </body>
 </html>

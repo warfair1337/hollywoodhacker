@@ -1,12 +1,10 @@
 # hollywoodhacker
 
-Hollywood and TV-show inspired attack and hacking simulator.
+Hollywood and TV-show inspired cyber ops command center.
 
-Open `index.html` in a browser to run the simulator.
-The page displays scrolling logs, a world map with attack traces and firewall breach indicators.
-Explore the fictional file browser and use the "Deploy Countermeasure" button to reset attacks.
+- Open `index.html` in a browser to launch a neon‑soaked, cinematic UI.
+- Watch realistic attack arcs animate across a world map, with radar sweeps, glow effects, and dynamic threat levels.
+- Interact with the file vault and deploy countermeasures via the control panel.
 
-## CLI Mode
-
-Run `python cli.py` for a text-based version of the simulator.
-Type `counter` to deploy countermeasures or `exit` to quit the program.
+Notes:
+- The CLI mode has been removed in this rewrite. The experience is now fully visual and browser‑based.
